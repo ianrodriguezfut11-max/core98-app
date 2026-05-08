@@ -1,47 +1,5 @@
 import { useState, useEffect } from "react";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from "recharts";
-
-// ─── SUPABASE ─────────────────────────────────────────────────────────────────
-const SUPABASE_URL  = "https://tppcjxqtrierfirgrgav.supabase.co";
-const SUPABASE_KEY  = "sb_publishable_lPnViHm-1FRlOErwaVu3fA_wDgenx14";
-const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
-
-// ─── FUNÇÕES DO BANCO ─────────────────────────────────────────────────────────
-async function dbLogin(email, senha) {
-  const { data, error } = await sb.from("usuarios").select("*").eq("email", email).eq("senha", senha).single();
-  return { data, error };
-}
-async function dbGetAluno(id) {
-  const { data: aluno } = await sb.from("alunos").select("*").eq("id", id).single();
-  const { data: avaliacoes } = await sb.from("avaliacoes").select("*").eq("aluno_id", id).order("data");
-  const { data: cargas } = await sb.from("cargas").select("*").eq("aluno_id", id).order("criado_em");
-  return { aluno, avaliacoes: avaliacoes || [], cargas: cargas || [] };
-}
-async function dbGetAlunos() {
-  const { data } = await sb.from("usuarios").select("*").eq("role", "aluno");
-  return data || [];
-}
-async function dbGetMensagens(userId) {
-  const { data } = await sb.from("mensagens").select("*").or(`para_id.eq.${userId},tipo.eq.geral`).order("criado_em", { ascending: false });
-  return data || [];
-}
-async function dbGetTreinos(userId) {
-  const { data } = await sb.from("treinos").select("*").eq("aluno_id", userId);
-  return data || [];
-}
-async function dbEnviarMensagem(msg) {
-  await sb.from("mensagens").insert(msg);
-}
-async function dbConfirmarTreino(treinoId, confirmado) {
-  await sb.from("treinos").update({ confirmado }).eq("id", treinoId);
-}
-async function dbSalvarAvaliacao(av) {
-  await sb.from("avaliacoes").insert(av);
-}
-async function dbSalvarCarga(carga) {
-  await sb.from("cargas").insert(carga);
-}
 
 
 
@@ -163,11 +121,13 @@ function Login({onLogin}){
   const selUser=USERS.find(u=>u.email===email);
   const P=pal(selUser?.genero||"neutro");
 
-  const doLogin=async()=>{
+  const doLogin=()=>{
     setLoad(true);
-    const {data,error}=await dbLogin(email.trim(),senha);
-    if(data) onLogin(data);
-    else{setErro("E-mail ou senha incorretos");setLoad(false);}
+    setTimeout(()=>{
+      const u=USERS.find(u=>u.email===email.trim()&&u.senha===senha);
+      if(u) onLogin(u);
+      else{setErro("E-mail ou senha incorretos");setLoad(false);}
+    },600);
   };
 
   return(
@@ -789,17 +749,6 @@ export default function App(){
   const [alunos,setAlunos]=useState(ALUNOS_INIT);
   const [mensagens,setMensagens]=useState(MENSAGENS_INIT);
   const [treinos,setTreinos]=useState(TREINOS_INIT);
-  const [loading,setLoading]=useState(false);
-
-  useEffect(()=>{
-    if(!user) return;
-    setLoading(true);
-    Promise.all([
-      dbGetAlunos().then(data=>{if(data.length) setAlunos(data);}),
-      dbGetMensagens(user.id).then(data=>{if(data.length) setMensagens(data);}),
-      dbGetTreinos(user.id).then(data=>{if(data.length) setTreinos(data);}),
-    ]).finally(()=>setLoading(false));
-  },[user]);
 
   if(!user) return <Login onLogin={setUser}/>;
 
