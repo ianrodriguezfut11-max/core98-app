@@ -5,7 +5,7 @@ import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 
 // ─── DADOS ────────────────────────────────────────────────────────────────────
 const USERS = [
-  { id:1, nome:"Prof. Anderson Silva", email:"professor@fit.com", senha:"prof123",  role:"professor", avatar:"A", genero:"neutro" },
+  { id:1, nome:"Prof. Ian Rodriguez da Silva", email:"ianrodriguezfut11@gmail.com", senha:@Ian29051998",  role:"professor", avatar:"A", genero:"neutro" },
   { id:2, nome:"Carlos Mendes",        email:"carlos@fit.com",   senha:"aluno123", role:"aluno",     avatar:"C", genero:"m" },
   { id:3, nome:"Ana Paula Rocha",      email:"ana@fit.com",      senha:"aluno123", role:"aluno",     avatar:"A", genero:"f" },
   { id:4, nome:"Rodrigo Lima",         email:"rodrigo@fit.com",  senha:"aluno123", role:"aluno",     avatar:"R", genero:"m" },
