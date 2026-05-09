@@ -231,7 +231,7 @@ function AlunoMensagens({user,mensagens,treinos,setTreinos,P}){
               <div style={{display:"flex",justifyContent:"space-between",marginBottom:8,alignItems:"center"}}>
                 <div style={{display:"flex",gap:8,alignItems:"center"}}>
                   <div style={{width:28,height:28,borderRadius:8,background:"linear-gradient(135deg,#2a2a2a,#111)",border:"1px solid rgba(255,255,255,0.15)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:"#fff",fontWeight:700}}>P</div>
-                  <span style={{fontSize:12,fontWeight:700,color:C.txt}}>Prof. Anderson</span>
+                  <span style={{fontSize:12,fontWeight:700,color:C.txt}}>Prof. Ian</span>
                   {m.tipo==="geral"&&<span style={{fontSize:10,padding:"2px 8px",borderRadius:10,background:"rgba(255,255,255,0.08)",color:C.mut,fontWeight:600}}>📢 Geral</span>}
                 </div>
                 <span style={{fontSize:11,color:C.mut}}>{m.data} · {m.hora}</span>
